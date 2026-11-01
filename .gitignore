@@ -1,0 +1,22 @@
+# Go build and test outputs
+/bin/
+*.test
+/coverage.out
+
+# Godot source, build output, and SCons cache
+/tmp/
+/.scons_cache/
+
+# Build logs
+/build.log
+*.log
+
+# Editor and IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
