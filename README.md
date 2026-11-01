@@ -12,7 +12,7 @@ This project replaces the GitHub Actions-based Godot build system with a native 
 - **Accepts configuration via environment variables** for easy integration with Docker, CI/CD, and automation systems
 - **Produces identical build artifacts** as the original workflows (executables, templates, APKs, etc.)
 - **Manages dependencies** (Python, SCons, Emscripten, Java, .NET, etc.)
-- **Is completely standalone** with no external Go dependencies (uses only stdlib)
+- **Uses SQLite** to persist API build job state
 
 ## Building the Go Application
 
@@ -76,6 +76,10 @@ export OUTPUT_DIR=./artifacts
 ./bin/godot-builder
 ```
 
+### Build API job storage
+
+Run the API with `go run ./cmd/api`. Job state is stored in `tmp/jobs.sqlite` by default; set `JOBS_DB_PATH` to use another SQLite file.
+
 #### Web template with optimization
 
 ```bash
@@ -105,18 +109,20 @@ export RUN_TEMPLATE=true
 ./bin/godot-builder
 ```
 
-### Docker & AWS
-
-For containerization instructions and example Dockerfiles, see DOCKER.md. For deploying builds on AWS (EC2, ECS/Fargate, CodeBuild) and artifact/caching recommendations, see AWS.md.
-
 ## Project Structure
 
 ```
 godot-builder/
 ├── cmd/
+│   ├── api/
+│   │   └── main.go                 # API entry point
 │   └── godot-builder/
 │       └── main.go                 # Entry point
 ├── internal/
+│   ├── api/
+│   │   └── server.go               # HTTP handlers and build worker
+│   ├── jobs/
+│   │   └── store.go                # SQLite-backed build job storage
 │   ├── builder/
 │   │   └── builder.go              # Main orchestrator
 │   ├── config/
