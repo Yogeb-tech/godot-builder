@@ -10,8 +10,9 @@ import (
 	"os/exec"
 	"time"
 
-	"github.com/google/uuid"
 	"godot-builder/internal/jobs"
+
+	"github.com/google/uuid"
 )
 
 type server struct {
@@ -22,7 +23,7 @@ type server struct {
 func Run() error {
 	dbPath := os.Getenv("JOBS_DB_PATH")
 	if dbPath == "" {
-		dbPath = "tmp/jobs.sqlite"
+		dbPath = "data/jobs.sqlite"
 	}
 
 	jobStore, err := jobs.Open(dbPath)
